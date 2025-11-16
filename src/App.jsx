@@ -28,6 +28,7 @@ function FloatingSphere() {
 // Hook progress scroll
 function useScrollProgress() {
   const [progress, setProgress] = React.useState(0);
+  const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -37,11 +38,16 @@ function useScrollProgress() {
       setProgress(value);
     };
 
+    // Simuler un loading 2s
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  return progress;
+  return { progress, loading };
 }
 
 // Modal de contact
@@ -79,7 +85,7 @@ function ContactModal({ isOpen, onClose }) {
 }
 
 export default function App() {
-  const scroll = useScrollProgress();
+  const { progress: scroll, loading } = useScrollProgress();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const projects = [
@@ -87,6 +93,14 @@ export default function App() {
     {image:'weather.png', title: "bilanga APP backend", desc: "expo + backend + Auth" },
     { image:'ndakTik.png',title: "bilanga APP mobile" , desc: "plateforme des agriculteurs" },
   ];
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
@@ -109,12 +123,6 @@ export default function App() {
       {/* MODAL CONTACT */}
       <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-      {/* BOUTON FLOTTANT CONTACT */}
-     {/* BOUTON FLOTTANT RETOUR EN HAUT */}
-
-
-
-
       {/* BACKGROUND 3D FIXE */}
       <Canvas className="canvas-bg" camera={{ position: [0, 0, 5] }}>
         <ambientLight intensity={0.6} />
@@ -134,7 +142,7 @@ export default function App() {
         <p>Création d'interfaces modernes, rapides et élégantes.</p>
         <a href={bilanga} download={true}>
           <button style={{backgroundColor: "#00ff88",padding: "10px 20px",borderRadius: "5px",border: "none",cursor: "pointer"}}>
-            Télécharger CV
+            Télécharger mon CV
           </button>
         </a>
       </section>
@@ -163,44 +171,47 @@ export default function App() {
       <section className="section skills fade-section">
         <h2>Mes Compétences</h2>
 
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} viewport={{ once: false }}>
+        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <span>HTML / CSS</span>
           <div className="progress-bar"><div style={{ width: "95%" }} /></div>
         </motion.div>
 
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} viewport={{ once: false }}>
+        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
           <span>JavaScript</span>
           <div className="progress-bar"><div style={{ width: "90%" }} /></div>
         </motion.div>
 
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, ease: "easeOut" }} viewport={{ once: false }}>
+        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, ease: "easeOut" }}>
           <span>React.js</span>
           <div className="progress-bar"><div style={{ width: "98%" }} /></div>
         </motion.div>
 
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, ease: "easeOut" }} viewport={{ once:false }}>
+        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, ease: "easeOut" }}>
           <span>Node.js</span>
           <div className="progress-bar"><div style={{ width: "75%" }} /></div>
         </motion.div>
 
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} viewport={{ once: false }}>
+        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <span>Express</span>
           <div className="progress-bar"><div style={{ width: "75%" }} /></div>
         </motion.div>
 
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} viewport={{ once: false }}>
+        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <span>MongoDB (en cours)</span>
           <div className="progress-bar"><div style={{ width: "75%" }} /></div>
         </motion.div>
 
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} viewport={{ once:false }}>
+        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <span>React Native (en cours)</span>
           <div className="progress-bar"><div style={{ width: "80%" }} /></div>
         </motion.div>
       </section>
 
       {/* FOOTER */}
-      <footer className="footer">© {new Date().getFullYear()} Portfolio – Design Christian Munie</footer>
+      <footer className="footer">
+        © {new Date().getFullYear()} Portfolio – Design Christian Munie
+      </footer>
     </div>
   );
 }
+
