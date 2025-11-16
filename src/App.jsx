@@ -136,7 +136,7 @@ export default function App() {
       {/* HERO */}
       <section className="section hero">
         <h2>
-          salut ,je suis <span style={{color:"white"}}>Christian Munie</span>
+          salut 🖐🏿 ,je suis <span style={{color:"white"}}>Christian Munie</span>
         </h2>
         <h1>Développeur Frontend</h1>
         <p>Création d'interfaces modernes, rapides et élégantes.</p>
