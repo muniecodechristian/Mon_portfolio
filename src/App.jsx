@@ -3,7 +3,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import "./App.css";
 import { motion, AnimatePresence } from "framer-motion";
-import bilanga from "./assets/bilangaapp.png";
+import cv from "./assets/CV Christian Munie .pdf";
 
 // Composant sphere 3D
 function FloatingSphere() {
@@ -88,10 +88,13 @@ export default function App() {
   const { progress: scroll, loading } = useScrollProgress();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+ 
   const projects = [
-    { image:'ndak.PNG',title: "l'application NDAKO", desc: "App mobile Expo + Backend Node.js" },
-    {image:'weather.png', title: "bilanga APP backend", desc: "expo + backend + Auth" },
-    { image:'ndakTik.png',title: "bilanga APP mobile" , desc: "plateforme des agriculteurs" },
+    { image:'ndak.PNG',title: "l'application NDAKO", desc: "App mobile Expo + Backend Node.js",url:'https://ndako-lg8h.onrender.com/' },
+    {image:'weather.png', title: "bilanga APP backend", desc: "expo + backend + Auth",url:'https://github.com/muniecodechristian/BilangaApp_Backend' },
+    { image:'ndakTik.png',title: "bilanga APP mobile" , desc: "plateforme des agriculteurs",url:'https://github.com/muniecodechristian/BilangaApp_Backend' },
+    { image:'news.PNG',title: "Basango" , desc: "plateforme des news",url:'https://github.com/muniecodechristian/Basango' },
+
   ];
 
   if (loading) {
@@ -140,7 +143,7 @@ export default function App() {
         </h2>
         <h1>Développeur Frontend</h1>
         <p>Création d'interfaces modernes, rapides et élégantes.</p>
-        <a href={bilanga} download={true}>
+          <a href={cv} download={true}>
           <button style={{backgroundColor: "#00ff88",padding: "10px 20px",borderRadius: "5px",border: "none",cursor: "pointer"}}>
             Télécharger mon CV
           </button>
@@ -162,6 +165,7 @@ export default function App() {
               <img src={p.image} alt='' />
               <h3>{p.title}</h3>
               <p>{p.desc}</p>
+                <a href={p.url} target="_blank" rel="noopener noreferrer" style={{textDecoration:"none",color:"white",border:"1px solid white",padding:"5px 10px",borderRadius:"5px"}}>voir</a>
             </div>
           ))}
         </motion.div>
