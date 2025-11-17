@@ -155,7 +155,7 @@ body {
 
 /* ✨ Hero */
 .hero h1 {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 700;
   text-shadow: 0 0 20px #00ff88;
   animation: neonText 3s infinite ease-in-out;
@@ -182,7 +182,7 @@ body {
 
 .project-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(262px, 1fr));
   gap: 25px;
 }
 
@@ -289,6 +289,13 @@ margin-bottom: 20px;
 .floating-contact-btn:hover {
   transform: scale(1.1);
 }
+
+
+
+
+
+
+
 
 
 
