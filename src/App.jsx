@@ -85,6 +85,13 @@ export default function App() {
     url: "https://www.bacsarlu.com",
     img: "./bac.png",
   },
+  {
+    title: "stream & cours ",
+
+    desc: "un réseau social  actuellement en développement permettant aux communautés de s'apprendre des langues entre eux EX:un indien qui connait le lingala et apprend un congolais le hindi en appel vidéo en streaming",
+    url: "https://github.com/muniecodechristian/streamCours",
+    img: "./stream.png",
+  },
 ];
 
 
