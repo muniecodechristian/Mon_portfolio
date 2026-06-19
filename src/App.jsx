@@ -1,221 +1,173 @@
 import React, { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
-import "./App.css";
 import { motion, AnimatePresence } from "framer-motion";
 import cv from "./assets/CV Christian Munie .pdf";
+import "./App.css";
 
-// Composant sphere 3D
 function FloatingSphere() {
-  const meshRef = useRef();
+  const ref = useRef();
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    if (meshRef.current) {
-      meshRef.current.rotation.y = t * 0.2;
-      meshRef.current.rotation.x = Math.sin(t * 0.5) * 0.1;
+    if (ref.current) {
+      ref.current.rotation.y = t * 0.15;
+      ref.current.rotation.x = Math.sin(t * 0.4) * 0.2;
     }
   });
 
   return (
-    <mesh ref={meshRef} position={[0, 0, 0]}>
-      <sphereGeometry args={[1.5, 32, 32]} />
-      <meshStandardMaterial color="#00ff88" wireframe />
+    <mesh ref={ref}>
+      <sphereGeometry args={[1.6, 64, 64]} />
+      <meshStandardMaterial color="#111827" wireframe />
     </mesh>
   );
 }
 
-// Hook progress scroll
-function useScrollProgress() {
-  const [progress, setProgress] = React.useState(0);
-  const [loading, setLoading] = useState(true);
+function ContactModal({ open, onClose }) {
+  if (!open) return null;
 
-  React.useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const value = scrollTop / docHeight;
-      setProgress(value);
-    };
-
-    // Simuler un loading 2s
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return { progress, loading };
-}
-
-// Modal de contact
-function ContactModal({ isOpen, onClose }) {
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div 
-          className="modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div
-            className="modal-content"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <h2>Contactez-moi</h2>
-            <div className="contact-buttons">
-              <a href="https://wa.me/243998032140" target="_blank" rel="noreferrer">
-                WhatsApp
-              </a>
-              <a href="tel:+243974827978">Appel</a>
-              <a href="mailto:muniecodechristian@gmail.com">Email</a>
-            </div>
-            <button onClick={onClose} className="close-btn">Fermer</button>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-export default function App() {
-  const { progress: scroll, loading } = useScrollProgress();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
- 
-  const projects = [
-    { image:'ndak.PNG',title: "l'application NDAKO", desc: "App mobile Expo + Backend Node.js",url:'https://ndako-lg8h.onrender.com/' },
-    {image:'weather.png', title: "bilanga APP backend", desc: "expo + backend + Auth",url:'https://github.com/muniecodechristian/BilangaApp_Backend' },
-    { image:'ndakTik.png',title: "bilanga APP mobile" , desc: "plateforme des agriculteurs",url:'https://github.com/muniecodechristian/BilangaApp_Backend' },
-    { image:'news.PNG',title: "Basango" , desc: "plateforme des news",url:'https://github.com/muniecodechristian/Basango' },
-
-  ];
-
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
+    <div className="modalOverlay" onClick={onClose}>
+      <div className="modalCard" onClick={(e) => e.stopPropagation()}>
+        <h3>Contact</h3>
+        <div className="modalLinks">
+          <a href="https://wa.me/243998032140">WhatsApp</a>
+          <a href="tel:+243974827978">Appel</a>
+          <a href="mailto:muniecodechristian@gmail.com">Email</a>
+        </div>
+        <button onClick={onClose}>Fermer</button>
       </div>
-    );
-  }
-
-  return (
-    <div className="app-container">
-      {/* NAVBAR FIXE */}
-      <motion.nav
-        className="navbar"
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h3>Christian Munie</h3>
-        <button
-          className="contact-btn"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Contact
-        </button>
-      </motion.nav>
-
-      {/* MODAL CONTACT */}
-      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
-      {/* BACKGROUND 3D FIXE */}
-      <Canvas className="canvas-bg" camera={{ position: [0, 0, 5] }}>
-        <ambientLight intensity={0.6} />
-        <pointLight position={[10, 10, 10]} />
-        <FloatingSphere />
-      </Canvas>
-
-      {/* BARRE DE SCROLL */}
-      <div className="scroll-progress" style={{ width: `${scroll * 100}%` }} />
-
-      {/* HERO */}
-      <section className="section hero">
-        <h2>
-          salut 🖐🏿 ,je suis <span style={{color:"white"}}>Christian Munie</span>
-        </h2>
-        <h1>Développeur Frontend</h1>
-        <p>Création d'interfaces modernes, rapides et élégantes.</p>
-          <a href={cv} download={true}>
-          <button style={{backgroundColor: "#00ff88",padding: "10px 20px",borderRadius: "5px",border: "none",cursor: "pointer"}}>
-            Télécharger mon CV
-          </button>
-        </a>
-      </section>
-
-      {/* PROJETS */}
-      <section className="section projets">
-        <h2>Mes Projets</h2>
-        <motion.div 
-          initial={{ opacity: 0, y: 200, x:-50 }}
-          whileInView={{ opacity: 1, y: 0, x:0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          viewport={{ once: false }}
-          className="project-list"
-        >
-          {projects.map((p, index) => (
-            <div key={index} className="project-card">
-              <img src={p.image} alt='' />
-              <h3>{p.title}</h3>
-              <p>{p.desc}</p>
-                <a href={p.url} target="_blank" rel="noopener noreferrer" style={{textDecoration:"none",color:"white",border:"1px solid white",padding:"5px 10px",borderRadius:"5px"}}>voir</a>
-            </div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* SECTION COMPÉTENCES */}
-      <section className="section skills fade-section">
-        <h2>Mes Compétences</h2>
-
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
-          <span>HTML / CSS</span>
-          <div className="progress-bar"><div style={{ width: "95%" }} /></div>
-        </motion.div>
-
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
-          <span>JavaScript</span>
-          <div className="progress-bar"><div style={{ width: "90%" }} /></div>
-        </motion.div>
-
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, ease: "easeOut" }}>
-          <span>React.js</span>
-          <div className="progress-bar"><div style={{ width: "98%" }} /></div>
-        </motion.div>
-
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, ease: "easeOut" }}>
-          <span>Node.js</span>
-          <div className="progress-bar"><div style={{ width: "75%" }} /></div>
-        </motion.div>
-
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
-          <span>Express</span>
-          <div className="progress-bar"><div style={{ width: "75%" }} /></div>
-        </motion.div>
-
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
-          <span>MongoDB (en cours)</span>
-          <div className="progress-bar"><div style={{ width: "75%" }} /></div>
-        </motion.div>
-
-        <motion.div className="skill" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
-          <span>React Native (en cours)</span>
-          <div className="progress-bar"><div style={{ width: "80%" }} /></div>
-        </motion.div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        © {new Date().getFullYear()} Portfolio – Design Christian Munie
-      </footer>
     </div>
   );
 }
 
+export default function App() {
+  const [open, setOpen] = useState(false);
+
+  const projects = [
+    {
+      title: "NDAKO",
+      desc: "Plateforme de gestion locative moderne",
+      url: "https://ndako-lg8h.onrender.com/",
+      img:"./ndak.PNG"
+    },
+    {
+      title: "Bilanga Backend",
+      desc: "API agriculture + authentification + IA",
+      url: "https://github.com/muniecodechristian/BilangaApp_Backend",
+        img:"./ndak.PNG"
+    },
+    {
+      title: "Bilanga Mobile",
+      desc: "App mobile agriculture connectée",
+      url: "https://github.com/muniecodechristian/BilangaApp_Backend",
+        img:"./ndak.PNG"
+    },
+    {
+      title: "ftEmploi",
+      desc: "Plateforme  d'offre d'emploi",
+      url: "https://ft-emploi-front.vercel.app",
+        img:"./ndak.PNG"
+    },
+    {
+      title: "Billeterie app",
+      desc: "une app web qui est en cours dvelopement poir le championnat national",
+      url: "https://billeterie-app.vercel.app",
+        img:"./ndak.PNG"
+    },
+    {
+      title: "Bac SARLU",
+      desc: "une app web de la sociéte bac sarlu pour la demande de leur services ",
+      url: "https://www.bacsarlu.com",
+        img:"./ndak.PNG"
+    },
+  ];
+
+  return (
+    <div className="app">
+      <ContactModal open={open} onClose={() => setOpen(false)} />
+
+      <Canvas className="bg">
+        <ambientLight intensity={0.7}   color="#0b5d2a"/>
+        <FloatingSphere   />
+      </Canvas>
+
+      <header className="nav">
+        <div className="logo"> Christian Munie</div>
+        <nav>
+          <a href="#projects">Projets</a>
+          <a href="#skills">Skills</a>
+          <button onClick={() => setOpen(true)}>Me Contacter</button>
+        </nav>
+      </header>
+
+      <section className="hero">
+        <div className="heroText">
+          <p className="badge">FullStack Developer</p>
+          <h1>
+            Dévelopement d'application web et mobile modernes, rapides, <span>scalables</span>
+          </h1>
+          <p>
+            Je construis des produits web et mobiles orientés performance et
+            expérience utilisateur.
+          </p>
+
+          <div className="cta">
+            <a className="primary" href={cv} download>
+              Télécharger mon CV
+            </a>
+            <a className="secondary" href="#projects">
+              Voir mes projets
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="projects">
+        <h2>Mes Projets</h2>
+
+        <div className="grid">
+          {projects.map((p, i) => (
+            <div className="card" key={i}>
+              <img src={p?.img} alt="" />
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+              <a href={p.url} target="_blank">
+                Ouvrir
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section" id="skills">
+        <h2>Skills</h2>
+
+        <div className="skills">
+          {[
+            ["HTML/CSS", 95],
+            ["JavaScript", 92],
+            ["React", 96],
+            ["Node.js", 80],
+            ["MongoDB", 75],
+            ["React Native", 78],
+          ].map(([name, value], i) => (
+            <div className="skill" key={i}>
+              <div className="skillTop">
+                <span>{name}</span>
+                <span>{value}%</span>
+              </div>
+              <div className="bar">
+                <div style={{ width: `${value}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="footer">
+        © {new Date().getFullYear()} Christian Munie
+      </footer>
+    </div>
+  );
+}
