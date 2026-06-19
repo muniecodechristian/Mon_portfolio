@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { MessageCircle, Menu, X } from "lucide-react";
+
 import cv from "./assets/CV Christian Munie .pdf";
 import "./App.css";
 
@@ -44,6 +46,7 @@ function ContactModal({ open, onClose }) {
 
 export default function App() {
   const [open, setOpen] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
 
   const projects = [
   {
@@ -56,31 +59,31 @@ export default function App() {
     title: "Bilanga Backend",
     desc: "API complète dédiée à l'agriculture avec authentification et services IA.",
     url: "https://github.com/muniecodechristian/BilangaApp_Backend",
-    img: "./ndak.PNG",
+    img: "./bilangaback.png",
   },
   {
     title: "Bilanga Mobile",
-    desc: "Application mobile connectée destinée aux acteurs du secteur agricole.",
+    desc: "Application mobile connectée destinée aux acteurs du secteur agricole ,réconnaissance plante par IA méteo en temps réel ,NB:je n'ai pas deployer cette app sur playstore faute de finalisation et moyen de payer d'autres services.",
     url: "https://github.com/muniecodechristian/BilangaApp_Backend",
-    img: "./ndak.PNG",
+    img: "./bilangaApp.png",
   },
   {
     title: "ftEmploi",
     desc: "Plateforme moderne de recherche et de publication d'offres d'emploi.",
     url: "https://ft-emploi-front.vercel.app",
-    img: "./ndak.PNG",
+    img: "./ftemploi.png",
   },
   {
     title: "Billetterie App",
     desc: "Application web de gestion de billetterie actuellement en développement pour le championnat national.",
     url: "https://billeterie-app.vercel.app",
-    img: "./ndak.PNG",
+    img: "./billet.png"
   },
   {
     title: "Bac SARLU",
     desc: "Plateforme digitale permettant aux clients de solliciter les services de l'entreprise.",
     url: "https://www.bacsarlu.com",
-    img: "./ndak.PNG",
+    img: "./bac.png",
   },
 ];
 
@@ -158,14 +161,35 @@ const cardReveal = {
   <FloatingSphere />
 </Canvas>
 
-      <header className="nav">
-        <div className="logo"> Christian Munie</div>
-        <nav>
-          <a href="#projects">Projets</a>
-          <a href="#skills">Compétences</a>
-          <button onClick={() => setOpen(true)}>Entrons en contact</button>
-        </nav>
-      </header>
+    <header className="nav">
+  <div className="logo">Christian Munie</div>
+
+  <nav className="desktopNav">
+    <a href="#projects">Projets</a>
+    <a href="#skills">Compétences</a>
+    <button onClick={() => setOpen(true)}>
+       Me contacter
+    </button>
+  </nav>
+
+  <button
+    className="hamburger"
+    onClick={() => setMobileMenu(true)}
+  >
+    <Menu size={24} />
+  </button>
+</header>
+
+
+
+
+
+
+
+
+
+
+
 
       <motion.section
   className="hero"
@@ -328,8 +352,91 @@ style={{overflowY:'hidden'}}
     scale: 1.1,
   }}
 >
+  <MessageCircle height={20} width={20}/>
   
 </motion.button>
+
+
+
+
+
+
+
+<AnimatePresence>
+  {mobileMenu && (
+    <>
+      <motion.div
+        className="mobileOverlay"
+        onClick={() => setMobileMenu(false)}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      />
+
+      <motion.div
+        className="mobileDrawer"
+        initial={{
+          x: "100%",
+          opacity: 0,
+        }}
+        animate={{
+          x: 0,
+          opacity: 1,
+        }}
+        exit={{
+          x: "100%",
+          opacity: 0,
+        }}
+        transition={{
+          duration: 0.45,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        <div className="mobileHeader">
+          <span>Navigation</span>
+
+          <button
+            onClick={() => setMobileMenu(false)}
+          >
+            <X size={22} />
+          </button>
+        </div>
+
+        <div className="mobileLinks">
+          <a
+            href="#about"
+            onClick={() => setMobileMenu(false)}
+          >
+            À propos
+          </a>
+
+          <a
+            href="#projects"
+            onClick={() => setMobileMenu(false)}
+          >
+            Projets
+          </a>
+
+          <a
+            href="#skills"
+            onClick={() => setMobileMenu(false)}
+          >
+            Compétences
+          </a>
+
+          <button
+            onClick={() => {
+              setMobileMenu(false);
+              setOpen(true);
+            }}
+          >
+            Me contacter
+          </button>
+        </div>
+      </motion.div>
+    </>
+  )}
+</AnimatePresence>
 
 
  <motion.footer
